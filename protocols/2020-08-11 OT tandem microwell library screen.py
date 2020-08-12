@@ -22,12 +22,15 @@ def run(protocol: protocol_api.ProtocolContext):
     tiprack1 = protocol.load_labware("opentrons_96_tiprack_10ul", '2')
     tiprack2 = protocol.load_labware("opentrons_96_tiprack_300ul", '3')
 
-    # Load pipettes
+    # Load pipettes and set parameters
     p10 = protocol.load_instrument("p10_multi", "right", tip_racks = [tiprack1])
     p50 = protocol.load_instrument('p50_multi', "left", tip_racks = [tiprack2])
+
     p10.flow_rate.aspirate = 8
     p10.flow_rate.dispense = 8
-    p50.well_bottom_clearance.dispense = 3
+    # 384-well depth is 11.56 mm and max volume is 112 uL
+    # 20 uL is 2 mm high, tandem (middle) wall is 5.1 mm high
+    p50.well_bottom_clearance.dispense = 3.5
 
     # Specify target wells
     cols_compounds = [6, 7, 8, 9, 10]
@@ -45,18 +48,18 @@ def run(protocol: protocol_api.ProtocolContext):
     p50.distribute(20, reservoir_plate.columns_by_name()["1"], [reaction_plate.wells_by_name()[i] for i in wells_detection])
 
     # Distribute 2uL compound from 96-well library plate onto odd rows
-    p10.distribute(2, library_plate.columns_by_name()["6"], [reaction_plate.wells_by_name()[i] for i in ["A9", "A14"]], new_tip = 'once') # each compound is tested w/ and w/o SAM (30 uM)
-    p10.distribute(2, library_plate.columns_by_name()["7"], [reaction_plate.wells_by_name()[i] for i in ["A10", "A15"]], new_tip = 'once')
-    p10.distribute(2, library_plate.columns_by_name()["8"], [reaction_plate.wells_by_name()[i] for i in ["A11", "A16"]], new_tip = 'once')
-    p10.distribute(2, library_plate.columns_by_name()["9"], [reaction_plate.wells_by_name()[i] for i in ["A12", "A17"]], new_tip = 'once')
-    p10.distribute(2, library_plate.columns_by_name()["10"], [reaction_plate.wells_by_name()[i] for i in ["A13", "A18"]], new_tip = 'once')
+    p10.distribute(2, library_plate.columns_by_name()["6"], [reaction_plate.wells_by_name()[i] for i in ["A9", "A14"]], new_tip = 'once', touch_tip = True) # each compound is tested w/ and w/o SAM (30 uM)
+    p10.distribute(2, library_plate.columns_by_name()["7"], [reaction_plate.wells_by_name()[i] for i in ["A10", "A15"]], new_tip = 'once', touch_tip = True)
+    p10.distribute(2, library_plate.columns_by_name()["8"], [reaction_plate.wells_by_name()[i] for i in ["A11", "A16"]], new_tip = 'once', touch_tip = True)
+    p10.distribute(2, library_plate.columns_by_name()["9"], [reaction_plate.wells_by_name()[i] for i in ["A12", "A17"]], new_tip = 'once', touch_tip = True)
+    p10.distribute(2, library_plate.columns_by_name()["10"], [reaction_plate.wells_by_name()[i] for i in ["A13", "A18"]], new_tip = 'once', touch_tip = True)
 
     # Distribute 10uL protein onto odd rows
-    p50.distribute(10, sample_plate.columns_by_name()["4"], [reaction_plate.wells_by_name()[i] for i in wells_reaction], new_tip = 'once')
+    p50.distribute(10, sample_plate.columns_by_name()["4"], [reaction_plate.wells_by_name()[i] for i in wells_reaction], new_tip = 'once', touch_tip = True)
     
     # Transfer 8 uL reaction mix to reaction plate
-    p50.distribute(8, sample_plate.columns_by_name()["5"], [reaction_plate.wells_by_name()[i] for i in wells_reaction_noSAM]) # no SAM
-    p50.distribute(8, sample_plate.columns_by_name()["6"], [reaction_plate.wells_by_name()[i] for i in wells_reaction_SAM]) # SAM (30uM)
+    p50.distribute(8, sample_plate.columns_by_name()["5"], [reaction_plate.wells_by_name()[i] for i in wells_reaction_noSAM], touch_tip = True) # no SAM
+    p50.distribute(8, sample_plate.columns_by_name()["6"], [reaction_plate.wells_by_name()[i] for i in wells_reaction_SAM], touch_tip = True) # SAM (30uM)
 
 
 # SAMPLE CODE
@@ -83,4 +86,3 @@ def run(protocol: protocol_api.ProtocolContext):
 # # for row in rows:
 # # 	p20.distribute(10,mix_plate.wells_by_name()[(row+"2")],[reaction_plate.wells_by_name()[well_name] for well_name in [chr(ord(row)+1)+"2",chr(ord(row)+1)+"3",chr(ord(row)+1)+"4"]])
 # p20.transfer(10,reservoir_plate.wells_by_name()["A4"],[reaction_plate.wells_by_name()[well_name] for well_name in ["J2","J3","J4"]])
-
