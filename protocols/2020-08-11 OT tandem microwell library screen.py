@@ -27,6 +27,7 @@ def run(protocol: protocol_api.ProtocolContext):
     p50 = protocol.load_instrument('p50_multi', "left", tip_racks = [tiprack2])
     p10.flow_rate.aspirate = 8
     p10.flow_rate.dispense = 8
+    p50.well_bottom_clearance.dispense = 3
 
     # Specify target wells
     cols_compounds = [6, 7, 8, 9, 10]
