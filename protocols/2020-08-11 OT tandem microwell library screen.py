@@ -55,7 +55,7 @@ def run(protocol: protocol_api.ProtocolContext):
     p10.distribute(2, library_plate.columns_by_name()["10"], [reaction_plate.wells_by_name()[i] for i in ["A13", "A18"]], new_tip = 'once', touch_tip = True)
 
     # Distribute 10uL protein onto odd rows
-    p50.distribute(10, sample_plate.columns_by_name()["4"], [reaction_plate.wells_by_name()[i] for i in wells_reaction], new_tip = 'once', touch_tip = True)
+    p50.distribute(10, sample_plate.columns_by_name()["4"], [reaction_plate.wells_by_name()[i] for i in wells_reaction], new_tip = 'once')
     
     # Transfer 8 uL reaction mix to reaction plate
     p50.distribute(8, sample_plate.columns_by_name()["5"], [reaction_plate.wells_by_name()[i] for i in wells_reaction_noSAM], touch_tip = True) # no SAM
