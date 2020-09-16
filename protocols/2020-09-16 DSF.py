@@ -2,6 +2,13 @@
 # Objective: screen small library of compounds at 30uM concentration
 # it is OK to prepare assay at room temperature to include a 30 min RT incubation step before heating from 25 (RT) to 95°C
 
+# RANT
+# The robot uses 300uL tips which deviate the lower they are to calibrate all labware which is later targeted using 10uL tips.
+# You can use your best ability to aim the 300uL tips into the tiny 384 well necks but once a tip deviates or it grabs the 10uLs
+# it can completely throw around the 384 plate and ruin the experiment. This is a major flaw.
+# Also, the 300uL tips are not always all picked up. The calibration can not be flush with the neck of the tips, but quite deep.
+# Note to self: ALWAYS ALWAYS do a dry run please, without exception. It is a hassle, but less than a ruined experiment.
+
 from opentrons import protocol_api
 
 metadata = {'apiLevel': '2.5'}
@@ -12,7 +19,7 @@ def run(protocol: protocol_api.ProtocolContext):
     
     # Load Labware
     temp_mod = protocol.load_module('Temperature Module', '9')
-    reaction_plate = temp_mod.load_labware("== custom labware definition goes here ==", label = "reaction plate") # where the magic happens
+    reaction_plate = temp_mod.load_labware("biorad_384_wellplate_50ul", label = "reaction plate") # where the magic happens
     # tube_rack = protocol.load_labware("opentrons_96_aluminumblock_generic_pcr_strip_200ul", "6", label = "aluminum block") # CBS and substrate stocks
     sample_plate = protocol.load_labware("greiner_96_wellplate_323ul", "6", label = "sample plate") # CBS and dye stocks (!!! protect dye from light !!!)
     library_plate = protocol.load_labware("greiner_96_wellplate_323ul", "5", label = "library plate") # compound library
@@ -32,7 +39,7 @@ def run(protocol: protocol_api.ProtocolContext):
     p50.well_bottom_clearance.dispense = 7
 
     # Specify target wells (ONLY NEED TO EDIT WELLS HERE)
-    samples = ["1", "2"] # columns on sample plate with protein and dye
+    samples = ["1", "2", "3"] # columns on sample plate with protein and dye
     cols_compounds = [6, 7, 8, 9, 10] # library columns to aspirate compounds from
     cols_woSAM = [7, 8, 9, 10, 11] # destination wells in reaction plate (384-tandem)
     cols_wSAM = [12, 13, 14, 15, 16] # destination wells in reaction plate (384-tandem) (30 uM SAM final c)
@@ -50,10 +57,11 @@ def run(protocol: protocol_api.ProtocolContext):
         p10.distribute(2.5, library_plate.columns_by_name()[lib_col], [reaction_plate.wells_by_name()[j] for j in wells_target], new_tip = 'once')
 
     # Transfer 5uL fluorescent dye from sample plate to reaction plate
-    p50.distribute(5, sample_plate.columns_by_name()[samples[0]], [reaction_plate.wells_by_name()[i] for i in wells_reaction])
+    p50.distribute(5, sample_plate.columns_by_name()[samples[2]], [reaction_plate.wells_by_name()[i] for i in wells_reaction])
 
     # Distribute 17.5 protein
-    p50.distribute(17.5, sample_plate.columns_by_name()[samples[0]], [reaction_plate.wells_by_name()[i] for i in wells_reaction], new_tip = 'once')
+    p50.distribute(17.5, sample_plate.columns_by_name()[samples[0]], [reaction_plate.wells_by_name()[i] for i in wells_reaction_woSAM], new_tip = 'once')
+    p50.distribute(17.5, sample_plate.columns_by_name()[samples[1]], [reaction_plate.wells_by_name()[i] for i in wells_reaction_wSAM], new_tip = 'once')
     
 
 # SAMPLE CODE
