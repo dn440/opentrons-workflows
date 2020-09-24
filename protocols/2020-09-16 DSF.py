@@ -57,11 +57,14 @@ def run(protocol: protocol_api.ProtocolContext):
         p10.distribute(2.5, library_plate.columns_by_name()[lib_col], [reaction_plate.wells_by_name()[j] for j in wells_target], new_tip = 'once')
 
     # Transfer 5uL fluorescent dye from sample plate to reaction plate
-    p50.distribute(5, sample_plate.columns_by_name()[samples[2]], [reaction_plate.wells_by_name()[i] for i in wells_reaction])
+    p50.distribute(5, sample_plate.columns_by_name()[samples[2]], [reaction_plate.wells_by_name()[i] for i in wells_reaction],
+    disposal_volume = 1, blow_out = False)
 
     # Distribute 17.5 protein
-    p50.distribute(17.5, sample_plate.columns_by_name()[samples[0]], [reaction_plate.wells_by_name()[i] for i in wells_reaction_woSAM], new_tip = 'once')
-    p50.distribute(17.5, sample_plate.columns_by_name()[samples[1]], [reaction_plate.wells_by_name()[i] for i in wells_reaction_wSAM], new_tip = 'once')
+    p50.distribute(17.5, sample_plate.columns_by_name()[samples[0]], [reaction_plate.wells_by_name()[i] for i in wells_reaction_woSAM],
+    disposal_volume = 1, blow_out = False, new_tip = 'once')
+    p50.distribute(17.5, sample_plate.columns_by_name()[samples[1]], [reaction_plate.wells_by_name()[i] for i in wells_reaction_wSAM],
+    disposal_volume = 1, blow_out = False, new_tip = 'once')
     
 
 # SAMPLE CODE
