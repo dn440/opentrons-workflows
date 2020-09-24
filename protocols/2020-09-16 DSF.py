@@ -19,7 +19,7 @@ def run(protocol: protocol_api.ProtocolContext):
     
     # Load Labware
     temp_mod = protocol.load_module('Temperature Module', '9')
-    reaction_plate = temp_mod.load_labware("biorad_384_wellplate_50ul", label = "reaction plate") # where the magic happens
+    reaction_plate = protocol.load_labware("biorad_384_wellplate_50ul", "8", label = "reaction plate") # where the magic happens
     # tube_rack = protocol.load_labware("opentrons_96_aluminumblock_generic_pcr_strip_200ul", "6", label = "aluminum block") # CBS and substrate stocks
     sample_plate = protocol.load_labware("greiner_96_wellplate_323ul", "6", label = "sample plate") # CBS and dye stocks (!!! protect dye from light !!!)
     library_plate = protocol.load_labware("greiner_96_wellplate_323ul", "5", label = "library plate") # compound library
@@ -39,10 +39,10 @@ def run(protocol: protocol_api.ProtocolContext):
     p50.well_bottom_clearance.dispense = 7
 
     # Specify target wells (ONLY NEED TO EDIT WELLS HERE)
-    samples = ["1", "2", "3"] # columns on sample plate with protein and dye
+    samples = ["4", "5", "6"] # columns on sample plate with protein and dye
     cols_compounds = [6, 7, 8, 9, 10] # library columns to aspirate compounds from
-    cols_woSAM = [7, 8, 9, 10, 11] # destination wells in reaction plate (384-tandem)
-    cols_wSAM = [12, 13, 14, 15, 16] # destination wells in reaction plate (384-tandem) (30 uM SAM final c)
+    cols_woSAM = [1, 2, 3, 4, 5] # destination wells in reaction plate (384-tandem)
+    cols_wSAM = [6, 7, 8, 9, 10] # destination wells in reaction plate (384-tandem) (30 uM SAM final c)
     wells_reaction_woSAM = ['A' + str(i) for i in cols_woSAM]
     wells_reaction_wSAM = ['A' + str(i) for i in cols_wSAM]
     wells_reaction = ['A' + str(i) for i in (cols_woSAM + cols_wSAM)]
