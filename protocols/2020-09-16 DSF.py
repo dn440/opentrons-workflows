@@ -39,13 +39,13 @@ def run(protocol: protocol_api.ProtocolContext):
     p50.well_bottom_clearance.dispense = 7
 
     # Specify target wells (ONLY NEED TO EDIT WELLS HERE)
-    samples = ["4", "5", "6"] # columns on sample plate with protein and dye
+    samples = ["7", "8", "9"] # columns on sample plate with protein and dye
     cols_compounds = [6, 7, 8, 9, 10] # library columns to aspirate compounds from
     cols_woSAM = [1, 2, 3, 4, 5] # destination wells in reaction plate (384-tandem)
     cols_wSAM = [6, 7, 8, 9, 10] # destination wells in reaction plate (384-tandem) (30 uM SAM final c)
-    wells_reaction_woSAM = ['A' + str(i) for i in cols_woSAM]
-    wells_reaction_wSAM = ['A' + str(i) for i in cols_wSAM]
-    wells_reaction = ['A' + str(i) for i in (cols_woSAM + cols_wSAM)]
+    wells_reaction_woSAM = ['B' + str(i) for i in cols_woSAM]
+    wells_reaction_wSAM = ['B' + str(i) for i in cols_wSAM]
+    wells_reaction = ['B' + str(i) for i in (cols_woSAM + cols_wSAM)]
     
     #######################################################################################################################################
     ## PROCEDURE
@@ -58,13 +58,13 @@ def run(protocol: protocol_api.ProtocolContext):
 
     # Transfer 5uL fluorescent dye from sample plate to reaction plate
     p50.distribute(5, sample_plate.columns_by_name()[samples[2]], [reaction_plate.wells_by_name()[i] for i in wells_reaction],
-    disposal_volume = 1, blow_out = False)
+    disposal_volume = 0, blow_out = False)
 
     # Distribute 17.5 protein
     p50.distribute(17.5, sample_plate.columns_by_name()[samples[0]], [reaction_plate.wells_by_name()[i] for i in wells_reaction_woSAM],
-    disposal_volume = 1, blow_out = False, new_tip = 'once')
+    disposal_volume = 0, blow_out = False, new_tip = 'once')
     p50.distribute(17.5, sample_plate.columns_by_name()[samples[1]], [reaction_plate.wells_by_name()[i] for i in wells_reaction_wSAM],
-    disposal_volume = 1, blow_out = False, new_tip = 'once')
+    disposal_volume = 0, blow_out = False, new_tip = 'once')
     
 
 # SAMPLE CODE
