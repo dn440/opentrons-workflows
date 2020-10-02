@@ -44,9 +44,9 @@ def run(protocol: protocol_api.ProtocolContext):
     p50.well_bottom_clearance.dispense = 7
 
     # Specify target wells (ONLY NEED TO EDIT WELLS HERE)
-    samples = ["1", "2", "3"] # columns on sample plate with protein and dye
+    samples = ["5", "6", "7"] # columns on sample plate with protein and dye
     cols_compounds = [6, 7, 8, 9, 10] # library columns to aspirate compounds from
-    cols_woSAM = [1, 2, 3] # destination wells in reaction plate (384-tandem)
+    cols_woSAM = [1, 2, 3, 4, 5] # destination wells in reaction plate (384-tandem)
     cols_wSAM = [6, 7, 8, 9, 10] # destination wells in reaction plate (384-tandem) (30 uM SAM final c)
     wells_reaction_woSAM = ['A' + str(i) for i in cols_woSAM]
     wells_reaction_wSAM = ['A' + str(i) for i in cols_wSAM]
@@ -65,12 +65,13 @@ def run(protocol: protocol_api.ProtocolContext):
     #p10.distribute(13.5, sample_plate.columns_by_name()[samples[1]], [reaction_plate.wells_by_name()[i] for i in wells_reaction_wSAM],
     #disposal_volume = 0, blow_out = False, new_tip = 'once', touch_tip = True)
     
-    for i in range(0, len(wells_reaction_woSAM)):
-        p10.transfer(1.5, sample_plate.columns_by_name()[samples[2]], reaction_plate.wells_by_name()[wells_reaction_woSAM[i]], mix_after = (3, 1.5))
+    # Distribute compounds from 96-well library plate and mix
+    for i in range(0, len(cols_compounds)):
+        p10.transfer(1.5, library_plate.columns_by_name()[cols_compounds[i]], reaction_plate.wells_by_name()[wells_reaction_woSAM[i]], mix_after = (3, 1.5))
+        p10.transfer(1.5, library_plate.columns_by_name()[cols_compounds[i]], reaction_plate.wells_by_name()[wells_reaction_wSAM[i]], mix_after = (3, 1.5))
 
-    # Distribute compound from 96-well library plate and mix
-    #for i in range(0, len(cols_compounds)): # iterate through every column on the compound plate
-    #    lib_col = str(cols_compounds[i]) # column of the library plate (single number)
-    #    wells_target = [wells_reaction_woSAM[i], wells_reaction_wSAM[i]] # wells to distribute to (each compound is tested w/ and w/o SAM, so two apart columns)
-    #    p10.distribute(1.5, library_plate.columns_by_name()[lib_col], [reaction_plate.wells_by_name()[j] for j in wells_target],
-    #    new_tip = 'always', mix_after = (3, 1.5))
+    # for i in range(0, len(cols_compounds)): # iterate through every column on the compound plate
+    #     lib_col = str(cols_compounds[i]) # column of the library plate (single number)
+    #     wells_target = [wells_reaction_woSAM[i], wells_reaction_wSAM[i]] # wells to distribute to (each compound is tested w/ and w/o SAM, so two apart columns)
+    #     p10.distribute(1.5, library_plate.columns_by_name()[lib_col], [reaction_plate.wells_by_name()[j] for j in wells_target],
+    #     new_tip = 'always', mix_after = (3, 1.5))
