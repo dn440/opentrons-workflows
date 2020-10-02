@@ -68,9 +68,10 @@ def run(protocol: protocol_api.ProtocolContext):
     #disposal_volume = 0, blow_out = False, new_tip = 'once', touch_tip = True)
     
     # Distribute compounds from 96-well library plate and mix
+    vol = 1.5
     for i in range(0, len(cols_compounds)):
-        p10.transfer(1.5, library_plate.columns_by_name()[str(cols_compounds[i])], reaction_plate.wells_by_name()[wells_reaction_woSAM[i]], mix_after = (3, 1.5))
-        p10.transfer(1.5, library_plate.columns_by_name()[str(cols_compounds[i])], reaction_plate.wells_by_name()[wells_reaction_wSAM[i]], mix_after = (3, 1.5))
+        p10.transfer(vol, library_plate.columns_by_name()[str(cols_compounds[i])], reaction_plate.wells_by_name()[wells_reaction_woSAM[i]], mix_after = (3, vol))
+        p10.transfer(vol, library_plate.columns_by_name()[str(cols_compounds[i])], reaction_plate.wells_by_name()[wells_reaction_wSAM[i]], mix_after = (3, vol))
 
     # for i in range(0, len(cols_compounds)): # iterate through every column on the compound plate
     #     lib_col = str(cols_compounds[i]) # column of the library plate (single number)
