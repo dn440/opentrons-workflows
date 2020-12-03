@@ -3,7 +3,9 @@
 # by Dalibor Nakladal
 # objective: screen compound library in CBS activity assay
 
-# Notes: do not use touch tip, this guarantees losing tips
+# Notes
+# - do not use touch tip, this guarantees losing tips
+# - use blow-out with repeated transfers, otherwise the tip fills up
 
 from opentrons import protocol_api
 
@@ -11,7 +13,7 @@ metadata = {'apiLevel': '2.5'}
 
 def run(protocol: protocol_api.ProtocolContext):
     #######################################################################################################################################
-    ## SETUP
+    ## SETUP LABWARE
     
     # Load Labware
     temp_mod = protocol.load_module('Temperature Module', '9')
@@ -28,7 +30,7 @@ def run(protocol: protocol_api.ProtocolContext):
     tiprack3 = protocol.load_labware("opentrons_96_tiprack_10ul", '3')
 
     # Load pipettes and set parameters
-    p10 = protocol.load_instrument("p10_multi", "right", tip_racks = [tiprack1])
+    p10 = protocol.load_instrument("p10_multi", "right", tip_racks = [tiprack1, tiprack2, tiprack3])
 
     p10.flow_rate.aspirate = 8
     p10.flow_rate.dispense = 8
@@ -37,10 +39,13 @@ def run(protocol: protocol_api.ProtocolContext):
     # 20 uL is 2 mm high, tandem (middle) wall is 5.1 mm high
     p10.well_bottom_clearance.dispense = 1
 
+    #######################################################################################################################################
+    ## SETUP LOCATIONS
+
     # Specify target wells
     reagents = ["1"] # columns on reservoir plate
     # reaction
-    cols_reaction = list(range(1, 25)) # destination wells in reaction plate (Bio-Rad hardshell 384-well)
+    cols_reaction = list(range(1, 17)) # destination wells in reaction plate (Bio-Rad hardshell 384-well)
     wells_reaction = ['A' + str(i) for i in cols_reaction] + ['B' + str(i) for i in cols_reaction]
     
     # libraries
@@ -48,17 +53,17 @@ def run(protocol: protocol_api.ProtocolContext):
     lib2_cols = [1, 2, 3, 4, 5, 6, 7, 11, 12]
     lib3_cols = [1, 2, 3, 4, 5, 6, 7]
     lib4_cols = [1, 2, 3, 4, 5, 6, 7]
-    wells_1 = ['A' + str(i) for i in list(range(1, 13))] # target wells for library compounds
-    wells_2 = ['B' + str(i) for i in list(range(1, 13))]
-    wells_3 = ['A' + str(i) for i in list(range(13, 25))]
-    wells_4 = ['B' + str(i) for i in list(range(13, 25))]
+    wells_1 = ['A' + str(i) for i in list(range(1, 10))] # target wells for library compounds
+    wells_2 = ['B' + str(i) for i in list(range(1, 10))]
+    wells_3 = ['A' + str(i) for i in list(range(10, 17))]
+    wells_4 = ['B' + str(i) for i in list(range(10, 17))]
 
     #######################################################################################################################################
     ## PROCEDURE
 
     # Distribute substrate mixed with fluorescent dye and enzyme
     vol = 18
-    p10.distribute(vol, reservoir_plate.columns_by_name()[reagents[0]], [reaction_plate.wells_by_name()[i] for i in wells_reaction],
+    p10.transfer(vol, reservoir_plate.columns_by_name()[reagents[0]], [reaction_plate.wells_by_name()[i] for i in wells_reaction],
     disposal_volume = 0, blow_out = False, new_tip = 'once')
 
     # Distribute compounds from 96-well libraries
