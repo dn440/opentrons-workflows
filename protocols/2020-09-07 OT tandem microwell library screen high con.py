@@ -28,7 +28,7 @@ def run(protocol: protocol_api.ProtocolContext):
 
     p10.flow_rate.aspirate = 8
     p10.flow_rate.dispense = 8
-    # 384-well depth is 11.56 mm and max volume is 112 uL
+    # 384-well depth is 11.56 mm and max volume is 50 uL
     # 20 uL is 2 mm high, tandem (middle) wall is 5.1 mm high
     p50.well_bottom_clearance.dispense = 3.5
 
