@@ -16,11 +16,12 @@ def run(protocol: protocol_api.ProtocolContext):
     # Load Labware
     temp_mod = protocol.load_module('Temperature Module', '9')
     reaction_plate = temp_mod.load_labware("biorad_384_wellplate_50ul", label = "reaction plate") # where the magic happens
-    library_1 = protocol.load_labware("greiner_96_wellplate_323ul", "4", label = "library 1") # library 'morning'
+    library_1 = protocol.load_labware("greiner_96_wellplate_323ul", "8", label = "library 1") # library 'morning'
     reagent_plate = protocol.load_labware("greiner_96_wellplate_323ul", "6", label = "reagents")
     
     # Specify tip racks
-    tiprack1 = protocol.load_labware("opentrons_96_tiprack_10ul", '1')
+    tiprack1 = protocol.load_labware("opentrons_96_tiprack_10ul", '3')
+    tiprack2 = protocol.load_labware("opentrons_96_tiprack_300ul", '2')
 
     # Load pipettes and set parameters
     p10 = protocol.load_instrument("p10_multi", "right", tip_racks = [tiprack1])
@@ -36,12 +37,11 @@ def run(protocol: protocol_api.ProtocolContext):
     # Specify target wells
     reagents = ["1", "2"] # columns on reagent plate for substrate and enzyme
     # reaction
-    cols_reaction = list(range(1, 13)) # destination wells in reaction plate (Bio-Rad hardshell 384-well)
+    cols_reaction = list(range(4, 13)) # destination wells in reaction plate (Bio-Rad hardshell 384-well)
     wells_reaction = ['A' + str(i) for i in cols_reaction]
     
     # libraries
     lib1_cols = [1, 2, 3, 4, 5, 6, 7, 11, 12] # library columns to aspirate compounds from
-    wells_1 = ['A' + str(i) for i in list(range(1, 13))] # target wells for library compounds
 
     #######################################################################################################################################
     ## PROCEDURE
@@ -55,5 +55,5 @@ def run(protocol: protocol_api.ProtocolContext):
 
     # Distribute compounds from 96-well library
     # library 1 in wells A1-A12
-    for i in range(0, len(cols)):
-        p10.transfer(2, library_1.columns_by_name()[str(lib1_cols[i])], reaction_plate.wells_by_name()[wells_1[i]])
+    for i in range(0, len(cols_reaction)):
+        p10.transfer(2, library_1.columns_by_name()[str(lib1_cols[i])], reaction_plate.wells_by_name()[wells_reaction[i]])
