@@ -57,12 +57,14 @@ def run(protocol: protocol_api.ProtocolContext):
     #######################################################################################################################################
 
     ####### FIRST PLATE HALF #######
+    t_vol = 84
+    t_mix = 40
 
     ### reactions CON
     p50.pick_up_tip()
     # mix substrate and enzyme
-    p50.transfer(84, reagent_plate.columns_by_name()[reagents[4]], reagent_plate.columns_by_name()[reagents[0]],
-    mix_after = (3, 40), new_tip = 'never')
+    p50.transfer(t_vol, reagent_plate.columns_by_name()[reagents[4]], reagent_plate.columns_by_name()[reagents[0]],
+    mix_after = (3, t_mix), new_tip = 'never')
 
     # Distribute substrate mixed with fluorescent dye and enzyme
     p50.distribute(20, reagent_plate.columns_by_name()[reagents[0]], [reaction_plate.wells_by_name()[i] for i in wells_reaction_CON[0:12]],
@@ -72,8 +74,8 @@ def run(protocol: protocol_api.ProtocolContext):
     ### reactions SAM 
     p50.pick_up_tip()
     # mix substrate and enzyme
-    p50.transfer(84, reagent_plate.columns_by_name()[reagents[4]], reagent_plate.columns_by_name()[reagents[2]],
-    mix_after = (3, 40), new_tip = 'never')
+    p50.transfer(t_vol, reagent_plate.columns_by_name()[reagents[4]], reagent_plate.columns_by_name()[reagents[2]],
+    mix_after = (3, t_mix), new_tip = 'never')
 
     # Distribute substrate mixed with fluorescent dye and enzyme
     p50.distribute(20, reagent_plate.columns_by_name()[reagents[2]], [reaction_plate.wells_by_name()[i] for i in wells_reaction_SAM[0:12]],
@@ -85,21 +87,21 @@ def run(protocol: protocol_api.ProtocolContext):
     ### reactions CON
     p50.pick_up_tip()
     # mix substrate and enzyme
-    p50.transfer(84, reagent_plate.columns_by_name()[reagents[5]], reagent_plate.columns_by_name()[reagents[1]],
-    mix_after = (3, 40), new_tip = 'never')
+    p50.transfer(t_vol, reagent_plate.columns_by_name()[reagents[5]], reagent_plate.columns_by_name()[reagents[1]],
+    mix_after = (3, t_mix), new_tip = 'never')
 
     # Distribute substrate mixed with fluorescent dye and enzyme
-    p50.distribute(20, reagent_plate.columns_by_name()[reagents[0]], [reaction_plate.wells_by_name()[i] for i in wells_reaction_CON[12:24]],
+    p50.distribute(20, reagent_plate.columns_by_name()[reagents[1]], [reaction_plate.wells_by_name()[i] for i in wells_reaction_CON[12:25]],
     disposal_volume = 1, blow_out = True, new_tip = 'never')
     p50.drop_tip()
 
-    ### reactions SAM 
+    ### reactions SAM
     p50.pick_up_tip()
     # mix substrate and enzyme
-    p50.transfer(84, reagent_plate.columns_by_name()[reagents[5]], reagent_plate.columns_by_name()[reagents[3]],
-    mix_after = (3, 40), new_tip = 'never')
+    p50.transfer(t_vol, reagent_plate.columns_by_name()[reagents[5]], reagent_plate.columns_by_name()[reagents[3]],
+    mix_after = (3, t_mix), new_tip = 'never')
 
     # Distribute substrate mixed with fluorescent dye and enzyme
-    p50.distribute(20, reagent_plate.columns_by_name()[reagents[2]], [reaction_plate.wells_by_name()[i] for i in wells_reaction_SAM[12:24]],
+    p50.distribute(20, reagent_plate.columns_by_name()[reagents[3]], [reaction_plate.wells_by_name()[i] for i in wells_reaction_SAM[12:25]],
     disposal_volume = 1, blow_out = True, new_tip = 'never')
     p50.drop_tip()
