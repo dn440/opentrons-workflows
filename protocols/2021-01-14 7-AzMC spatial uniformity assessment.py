@@ -48,7 +48,7 @@ def run(protocol: protocol_api.ProtocolContext):
     reagents = ["1", "2", "3", "4", "5", "6"] # columns on reagent plate for substrate and enzyme
 
     # reaction
-    cols_reaction = list(range(1, 24)) # destination wells in reaction plate (Bio-Rad hardshell 384-well)
+    cols_reaction = list(range(1, 25)) # destination wells in reaction plate (Bio-Rad hardshell 384-well)
     wells_reaction_CON = ['A' + str(i) for i in cols_reaction]
     wells_reaction_SAM = ['B' + str(i) for i in cols_reaction]
     
