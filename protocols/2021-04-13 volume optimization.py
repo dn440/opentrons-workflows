@@ -7,6 +7,8 @@
 # test 8, 10, and 8+10 uL volumes; 2uL added to 8 and then another 10 will be tested another day
 # can the p300 be used for these volumes?
 
+# beware, this test can tell about one aspiration and 4x dispense from a p50. in a screening, more aspiration steps can follow
+
 from opentrons import protocol_api
 
 metadata = {'apiLevel': '2.5'}
@@ -40,20 +42,27 @@ def run(protocol: protocol_api.ProtocolContext):
     p50.well_bottom_clearance.dispense = 3.5
 
     # Specify source wells
-    reagents = ["1", "2"] # columns on reagent plate for substrate and enzyme
-
-
-    cols_10uL = list(range(5, 8)) # destination wells in reaction plate (Bio-Rad hardshell 384-well)
-    wells_reaction = ['A' + str(i) for i in cols_reaction]
-
-    cols_18uL = list(range(9, 14)) # destination wells in reaction plate (Bio-Rad hardshell 384-well)
-    wells_reaction = ['A' + str(i) for i in cols_reaction]
+    reagents = ["5"] # columns on reagent plate for substrate and enzyme
 
     #######################################################################################################################################
     ## PROCEDURE
 
-    cols_8uL = list(range(1, 4)) # destination wells in reaction plate (Bio-Rad hardshell 384-well)
+    cols_reaction = list(range(1, 5)) # destination wells in reaction plate (Bio-Rad hardshell 384-well)
     wells_reaction = ['A' + str(i) for i in cols_reaction]
     # Distribute fluorescent dye
-    p50.distribute(8, reagent_plate.columns_by_name()[reagents[1]], [reaction_plate.wells_by_name()[i] for i in wells_reaction],
+    p50.distribute(8, reagent_plate.columns_by_name()[reagents[0]], [reaction_plate.wells_by_name()[i] for i in wells_reaction],
+    disposal_volume = 1, blow_out = True, new_tip = 'once')
+
+    cols_reaction = list(range(5, 9)) # destination wells in reaction plate (Bio-Rad hardshell 384-well)
+    wells_reaction = ['A' + str(i) for i in cols_reaction]
+    # Distribute fluorescent dye
+    p50.distribute(10, reagent_plate.columns_by_name()[reagents[0]], [reaction_plate.wells_by_name()[i] for i in wells_reaction],
+    disposal_volume = 1, blow_out = True, new_tip = 'once')
+
+    cols_reaction = list(range(9, 13)) # destination wells in reaction plate (Bio-Rad hardshell 384-well)
+    wells_reaction = ['A' + str(i) for i in cols_reaction]
+    # Distribute fluorescent dye
+    p50.distribute(8, reagent_plate.columns_by_name()[reagents[0]], [reaction_plate.wells_by_name()[i] for i in wells_reaction],
+    disposal_volume = 1, blow_out = True, new_tip = 'once')
+    p50.distribute(10, reagent_plate.columns_by_name()[reagents[0]], [reaction_plate.wells_by_name()[i] for i in wells_reaction],
     disposal_volume = 1, blow_out = True, new_tip = 'once')
